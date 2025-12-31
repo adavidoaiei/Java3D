@@ -18,33 +18,33 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>scijava.public</id>
+            <url>https://maven.scijava.org/content/groups/public</url>
+        </repository>
+    </repositories>
+
     <dependencies>
-        <!-- Java3D Core -->
+        <!-- Java3D Core (SciJava mavenized version) -->
         <dependency>
-            <groupId>org.jogamp.java3d</groupId>
-            <artifactId>java3d-core</artifactId>
-            <version>1.7.1-final</version>
+            <groupId>org.scijava</groupId>
+            <artifactId>j3dcore</artifactId>
+            <version>1.6.0-scijava-2</version>
         </dependency>
         
         <!-- Java3D Utils -->
         <dependency>
-            <groupId>org.jogamp.java3d</groupId>
-            <artifactId>java3d-utils</artifactId>
-            <version>1.7.1-final</version>
+            <groupId>org.scijava</groupId>
+            <artifactId>j3dutils</artifactId>
+            <version>1.6.0-scijava-2</version>
         </dependency>
         
-        <!-- JOGL (Java OpenGL) -->
+        <!-- Vecmath (required by Java3D) -->
         <dependency>
-            <groupId>org.jogamp.jogl</groupId>
-            <artifactId>jogl-all-main</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-        
-        <!-- GlueGen Runtime -->
-        <dependency>
-            <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt-main</artifactId>
-            <version>2.4.0</version>
+            <groupId>org.scijava</groupId>
+            <artifactId>vecmath</artifactId>
+            <version>1.6.0-scijava-2</version>
         </dependency>
 
         <!-- JUnit for testing -->

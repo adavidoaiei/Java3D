@@ -1,10 +1,10 @@
 package com.java3d.app;
 
-import org.jogamp.java3d.*;
-import org.jogamp.java3d.utils.geometry.ColorCube;
-import org.jogamp.java3d.utils.geometry.Sphere;
-import org.jogamp.java3d.utils.universe.SimpleUniverse;
-import org.jogamp.vecmath.*;
+import org.scijava.java3d.*;
+import org.scijava.java3d.utils.geometry.ColorCube;
+import org.scijava.java3d.utils.geometry.Sphere;
+import org.scijava.java3d.utils.universe.SimpleUniverse;
+import org.scijava.vecmath.*;
 
 import javax.swing.*;
 import java.awt.*;
