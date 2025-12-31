@@ -103,6 +103,23 @@ public class Java3DApp extends JFrame {
     }
     
     public static void main(String[] args) {
+        try {
+            if (GraphicsEnvironment.isHeadless()) {
+                System.err.println("No DISPLAY found: running in headless environment. Start an X server or use Xvfb, or run with a real display.");
+                System.exit(1);
+            }
+        } catch (HeadlessException he) {
+            System.err.println("No DISPLAY found: running in headless environment. Start an X server or use Xvfb, or run with a real display.");
+            System.exit(1);
+        }
+
+        try {
+            Toolkit.getDefaultToolkit();
+        } catch (HeadlessException he) {
+            System.err.println("No DISPLAY found: running in headless environment. Start an X server or use Xvfb, or run with a real display.");
+            System.exit(1);
+        }
+
         SwingUtilities.invokeLater(() -> {
             new Java3DApp();
         });
