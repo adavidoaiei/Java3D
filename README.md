@@ -1,3 +1,4 @@
+![App Screenshot](https://github.com/adavidoaiei/Java3D/blob/main/demo.png)
 # Java3D Project
 
 A simple Java3D application that demonstrates basic 3D graphics rendering with a rotating colored cube and a sphere.
