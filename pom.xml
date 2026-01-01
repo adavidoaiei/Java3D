@@ -103,6 +103,20 @@
                 <version>3.1.0</version>
                 <configuration>
                     <mainClass>com.java3d.app.Java3DApp</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>java.library.path</key>
+                            <value>${project.basedir}/natives/linux-amd64</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>jogl.disable.openglarbcontext</key>
+                            <value>false</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>sun.java2d.opengl</key>
+                            <value>false</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
             <!-- Unpack JOGL/GlueGen native libraries into project/natives -->

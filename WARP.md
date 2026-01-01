@@ -16,8 +16,15 @@ mvn clean package          # Package as JAR
 
 ### Run Application
 ```bash
-mvn exec:java              # Run via Maven
+./run.sh                   # Run via wrapper script (recommended for Java 25+)
+mvn exec:java              # Run via Maven (requires MAVEN_OPTS for Java 25+)
 java -jar target/java3d-project-1.0-SNAPSHOT.jar  # Run compiled JAR directly
+```
+
+**For Java 25+**, native access permissions are required:
+```bash
+export MAVEN_OPTS="--enable-native-access=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED"
+mvn exec:java
 ```
 
 ### Testing
@@ -33,11 +40,12 @@ mvn clean                  # Remove target directory and build artifacts
 ## Architecture
 
 ### Technology Stack
-- **Java3D 1.7.1** (JOGL implementation) - 3D graphics API
-- **JOGL 2.4.0** - Java OpenGL bindings for hardware-accelerated rendering
-- **GlueGen Runtime** - Required for JOGL native library loading
+- **Java3D 1.6.0** (SciJava implementation) - 3D graphics API
+- **JOGL 2.5.0** - Java OpenGL bindings for hardware-accelerated rendering
+- **GlueGen Runtime 2.5.0** - Required for JOGL native library loading
 - **Swing** - UI framework for windowing
 - **Maven** - Build and dependency management
+- **Java 11+** - Required (tested with Java 25)
 
 ### Code Structure
 The project follows a simple single-class architecture:

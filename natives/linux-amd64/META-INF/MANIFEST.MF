@@ -1,15 +1,15 @@
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.10.5
-Created-By: 17.0.6+10-Debian-1deb11u1 (Debian)
+Created-By: 17.0.4+8-Debian-1deb11u1 (Debian)
 Application-Name: Java Bindings for OpenGL
 Specification-Title: Java Bindings for OpenGL API Specification
-Specification-Version: 2.5
+Specification-Version: 2.4
 Specification-Vendor: JogAmp Community
 Implementation-Title: Java Bindings for OpenGL Runtime Environment
-Implementation-Version: 2.5.0
-Implementation-Build: 2.5-b1533-20230818
+Implementation-Version: 2.4.0
+Implementation-Build: 2.4-b1519-20230201
 Implementation-Branch: origin/master
-Implementation-Commit: 70f62ca5d121e5e71548246d468b5e7baa5faf25
+Implementation-Commit: 7982cc52344c025c40da45fd4b946056a63bc855
 Implementation-Vendor: JogAmp Community
 Implementation-URL: http://jogamp.org/
 Extension-Name: jogamp.nativetag.opengl
