@@ -54,6 +54,22 @@
             <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- JOGL / GlueGen native runtimes for Linux x86_64 -->
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt</artifactId>
+            <version>2.4.0</version>
+            <classifier>natives-linux-amd64</classifier>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all</artifactId>
+            <version>2.4.0</version>
+            <classifier>natives-linux-amd64</classifier>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -88,6 +104,29 @@
                 <configuration>
                     <mainClass>com.java3d.app.Java3DApp</mainClass>
                 </configuration>
+            </plugin>
+            <!-- Unpack JOGL/GlueGen native libraries into project/natives -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>unpack-natives</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>runtime</includeScope>
+                            <includeClassifiers>natives-linux-amd64</includeClassifiers>
+                            <outputDirectory>${project.basedir}/natives/linux-amd64</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
