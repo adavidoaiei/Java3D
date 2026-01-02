@@ -1,101 +1,117 @@
 ![App Screenshot](https://github.com/adavidoaiei/Java3D/blob/main/demo.png)
-# Java3D Project
+## Project Overview
 
-A simple Java3D application that demonstrates basic 3D graphics rendering with a rotating colored cube and a sphere.
+This is a Java3D graphics application demonstrating 3D rendering using the JOGL (Java OpenGL) implementation. The project uses Maven for build management and requires Java 11+.
 
-## Features
+## Essential Commands
 
-- Rotating multicolored cube
-- Static green sphere with material properties
-- Directional and ambient lighting
-- Built with Java3D (JOGL implementation)
-
-## Prerequisites
-
-- Java 11 or higher
-- Maven 3.6 or higher
-- OpenGL-capable graphics card
-
-## Dependencies
-
-This project uses:
-- **Java3D 1.7.1** (JOGL implementation)
-- **JOGL 2.4.0** (Java OpenGL bindings)
-- **JUnit 5.9.3** (for testing)
-
-All dependencies are managed through Maven and will be automatically downloaded.
-
-## Building the Project
-
-To compile the project:
-
+### Build & Compile
 ```bash
-mvn clean compile
+mvn clean compile          # Compile the project
+mvn clean package          # Package as JAR
 ```
 
-To package the project as a JAR:
-
+### Run Application
 ```bash
-mvn clean package
+./run.sh                   # Run via wrapper script (recommended for Java 25+)
+mvn exec:java              # Run via Maven (requires MAVEN_OPTS for Java 25+)
+java -jar target/java3d-project-1.0-SNAPSHOT.jar  # Run compiled JAR directly
 ```
 
-## Running the Application
-
-Run the application using Maven:
-
+**For Java 25+**, native access permissions are required:
 ```bash
+export MAVEN_OPTS="--enable-native-access=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED"
 mvn exec:java
 ```
 
-Or run the compiled JAR directly:
-
+### Testing
 ```bash
-java -jar target/java3d-project-1.0-SNAPSHOT.jar
+mvn test                   # Run all tests (currently no tests in project)
 ```
 
-## Project Structure
-
-```
-java3d-project/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/
-│   │   │       └── java3d/
-│   │   │           └── app/
-│   │   │               └── Java3DApp.java
-│   │   └── resources/
-│   └── test/
-│       ├── java/
-│       └── resources/
-├── pom.xml
-└── README.md
+### Clean
+```bash
+mvn clean                  # Remove target directory and build artifacts
 ```
 
-## What the Application Does
+## Architecture
 
-When you run the application, you'll see:
-1. A window displaying a 3D scene
-2. A multicolored cube rotating around its center
-3. A green sphere positioned to the right of the cube
-4. Proper lighting that illuminates the objects
+### Technology Stack
+- **Java3D 1.6.0** (SciJava implementation) - 3D graphics API
+- **JOGL 2.5.0** - Java OpenGL bindings for hardware-accelerated rendering
+- **GlueGen Runtime 2.5.0** - Required for JOGL native library loading
+- **Swing** - UI framework for windowing
+- **Maven** - Build and dependency management
+- **Java 11+** - Required (tested with Java 25)
 
-## Troubleshooting
+### Code Structure
+The project follows a simple single-class architecture:
 
-### Display Issues
-If you encounter display issues on Linux, you may need to set:
+**`com.java3d.app.Java3DApp`** - Main application class that:
+- Extends `JFrame` to provide the application window
+- Creates a `SimpleUniverse` which manages the 3D viewing environment
+- Builds a scene graph in `createSceneGraph()` containing:
+  - **BranchGroup** (root): Top-level container for all scene elements
+  - **TransformGroup nodes**: Enable positioning and animation of objects
+  - **Geometry objects**: ColorCube and Sphere primitives
+  - **Behavior nodes**: RotationInterpolator for cube animation
+  - **Lighting**: DirectionalLight and AmbientLight for scene illumination
+  - **BoundingSphere**: Defines the active region for behaviors and lighting
+
+### Scene Graph Architecture
+Java3D uses a scene graph paradigm where objects are organized in a tree structure:
+```
+BranchGroup (root)
+├── TransformGroup (cube) [writable transform capability]
+│   ├── ColorCube
+│   └── RotationInterpolator [animated rotation behavior]
+├── TransformGroup (sphere) [static position]
+│   └── Sphere [with Material/Appearance]
+├── DirectionalLight
+└── AmbientLight
+```
+
+Key concepts:
+- **Capabilities**: Must be set before compiling the scene graph (e.g., `ALLOW_TRANSFORM_WRITE` for animation)
+- **Bounds**: Define spatial regions where behaviors and lights are active
+- **Alpha**: Timing mechanism for animations (4000ms rotation cycle, infinite loops with `-1`)
+- **Appearance/Material**: Define object surface properties (color, specularity, shininess)
+
+### Platform Considerations
+
+**Linux Display Issues**: If encountering graphics problems, software rendering can be forced:
 ```bash
 export LIBGL_ALWAYS_SOFTWARE=1
 ```
 
-### Native Library Errors
-Java3D requires native libraries. Maven should handle this automatically through the `jogl-all-main` and `gluegen-rt-main` dependencies which include platform-specific natives.
+**Native Libraries**: JOGL requires platform-specific native libraries. Maven dependencies (`jogl-all-main`, `gluegen-rt-main`) automatically include natives for all platforms (Linux, Windows, macOS).
 
-## Development
+## Development Patterns
 
-To add new 3D objects or modify the scene, edit the `createSceneGraph()` method in `Java3DApp.java`.
+### Adding New 3D Objects
+To add objects to the scene, modify the `createSceneGraph()` method:
+1. Create a `TransformGroup` for positioning/animation
+2. Create the geometry (use `org.jogamp.java3d.utils.geometry.*` utilities)
+3. Optionally set `Appearance` and `Material` for custom rendering
+4. Add to the parent node before `root.compile()`
 
-## License
+### Animation
+Use `Alpha` (timing) + Interpolator (e.g., `RotationInterpolator`, `PositionInterpolator`) pattern:
+- Alpha controls timing (duration, loop count)
+- Interpolator modifies transform over time
+- Must set `ALLOW_TRANSFORM_WRITE` capability on the TransformGroup
+- Set scheduling bounds to activate the behavior
 
-This is a sample project for learning purposes.
-# Java3D
+### Lighting
+Scene requires proper lighting to visualize materials:
+- `AmbientLight`: Provides base illumination (non-directional)
+- `DirectionalLight`: Simulates distant light source (e.g., sun)
+- Both require `setInfluencingBounds()` to define active region
+
+## Main Class Location
+The entry point is: `com.java3d.app.Java3DApp`
+
+This is configured in pom.xml for both:
+- `maven-jar-plugin` (manifest main class)
+- `exec-maven-plugin` (mvn exec:java)
+
